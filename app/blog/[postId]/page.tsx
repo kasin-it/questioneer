@@ -1,8 +1,4 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/q13qS5sf0WY
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
+import Image from "next/image"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
@@ -11,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 
-export default function Component() {
+export default function PostPage() {
     return (
         <main className="w-full">
             <section className="bg-gray-100 py-12 dark:bg-gray-800 md:py-16 lg:py-20">
@@ -36,7 +32,7 @@ export default function Component() {
             </section>
             <section className="py-12 md:py-16 lg:py-20">
                 <div className="container grid gap-12 px-4 md:px-6 lg:grid-cols-[3fr_1fr]">
-                    <article className="prose prose-gray dark:prose-invert mx-auto">
+                    <article className="prose prose-gray dark:prose-invert mx-auto flex flex-col gap-6">
                         <p>
                             Once upon a time, in a far-off land, there was a
                             very lazy king who spent all day lounging on his
@@ -57,11 +53,11 @@ export default function Component() {
                             they started laughing, they couldn't stop.
                         </p>
                         <figure>
-                            <img
+                            <Image
                                 alt="Cover image"
                                 className="aspect-video w-full overflow-hidden rounded-lg object-cover"
                                 height={340}
-                                src="/placeholder.svg"
+                                src="/hero_image.webp"
                                 width={1250}
                             />
                             <figcaption className="mt-2 text-sm text-gray-500 dark:text-gray-400">
@@ -84,7 +80,7 @@ export default function Component() {
                             The king's subjects were not amused. They grumbled
                             and complained, but the king was firm:
                         </p>
-                        <ul class="max-w-md list-inside list-disc space-y-1 text-gray-500 dark:text-gray-400">
+                        <ul className="max-w-md list-inside list-disc space-y-1 text-gray-500 dark:text-gray-400">
                             <li>1st level of puns: 5 gold coins</li>
                             <li>2nd level of jokes: 10 gold coins</li>
                             <li>3rd level of one-liners : 20 gold coins</li>
@@ -143,11 +139,11 @@ export default function Component() {
                                 <div className="grid gap-4">
                                     <div className="grid gap-2">
                                         <div className="flex items-center space-x-3">
-                                            <img
+                                            <Image
                                                 alt="Avatar"
                                                 className="h-10 w-10 rounded-full"
                                                 height={40}
-                                                src="/placeholder.svg"
+                                                src="/hero_image.webp"
                                                 style={{
                                                     aspectRatio: "40/40",
                                                     objectFit: "cover",
@@ -174,11 +170,11 @@ export default function Component() {
                                     </div>
                                     <div className="grid gap-2">
                                         <div className="flex items-center space-x-3">
-                                            <img
+                                            <Image
                                                 alt="Avatar"
                                                 className="h-10 w-10 rounded-full"
                                                 height={40}
-                                                src="/placeholder.svg"
+                                                src="/hero_image.webp"
                                                 style={{
                                                     aspectRatio: "40/40",
                                                     objectFit: "cover",

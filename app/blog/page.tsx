@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
@@ -26,11 +27,11 @@ export default function BlogPage() {
                             </p>
                         </div>
                     </div>
-                    <img
+                    <Image
                         alt="Hero"
                         className="mx-auto aspect-[3/1] overflow-hidden rounded-t-xl object-cover"
                         height="300"
-                        src="/placeholder.svg"
+                        src="/hero_image.webp"
                         width="1270"
                     />
                 </div>
@@ -39,11 +40,11 @@ export default function BlogPage() {
                 <div>
                     <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                         <div>
-                            <img
+                            <Image
                                 alt="Blog post"
                                 className="aspect-[3/2] overflow-hidden rounded-lg object-cover"
                                 height="400"
-                                src="/placeholder.svg"
+                                src="/hero_image.webp"
                                 width="600"
                             />
                             <div className="space-y-2 pt-4">
@@ -60,11 +61,11 @@ export default function BlogPage() {
                             </div>
                         </div>
                         <div>
-                            <img
+                            <Image
                                 alt="Blog post"
                                 className="aspect-[3/2] overflow-hidden rounded-lg object-cover"
                                 height="400"
-                                src="/placeholder.svg"
+                                src="/hero_image.webp"
                                 width="600"
                             />
                             <div className="space-y-2 pt-4">
@@ -83,11 +84,11 @@ export default function BlogPage() {
                             </div>
                         </div>
                         <div>
-                            <img
+                            <Image
                                 alt="Blog post"
                                 className="aspect-[3/2] overflow-hidden rounded-lg object-cover"
                                 height="400"
-                                src="/placeholder.svg"
+                                src="/hero_image.webp"
                                 width="600"
                             />
                             <div className="space-y-2 pt-4">
