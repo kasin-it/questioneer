@@ -3,7 +3,7 @@ import { BriefcaseIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
-import { buttonVariants } from "./ui/button"
+import { buttonVariants } from "../../components/ui/button"
 
 function Navbar() {
     return (
