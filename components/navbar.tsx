@@ -9,7 +9,7 @@ async function Navbar() {
     const { userId } = await auth()
     return (
         <header className="w-full border-b">
-            <nav className="container flex w-full justify-between py-5 text-xl">
+            <nav className="container flex w-full items-center justify-between py-5 text-xl">
                 <Logo />
                 {userId ? (
                     <UserButton />

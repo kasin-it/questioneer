@@ -30,17 +30,17 @@ model User {
 }
 
 model ConnectionToQuestions {
-  connnection_id Int    @id @default(sequence())
-  user           User   @relation(fields: [userId], references: [id])
-  userId         String
+  connnectionId Int    @id @default(sequence())
+  user          User   @relation(fields: [userId], references: [id])
+  userId        String
 
   question   Question @relation(fields: [questionId], references: [id])
   questionId Int
 
-  userType UserTypes
+  status Status
 }
 
-enum UserTypes {
+enum Status {
   favorite
   completed
 }

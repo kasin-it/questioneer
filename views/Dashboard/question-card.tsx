@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { CheckCircleIcon, Star } from "lucide-react"
 
 import { cn, dateFormatter } from "@/lib/utils"
@@ -9,6 +10,14 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
+
+import AddToFavouriteButton from "./add-to-favourite-button"
 
 interface QuestionCardProps {
     id: number
@@ -40,12 +49,14 @@ function QuestionCard({
     isCompleted = false,
 }: QuestionCardProps) {
     return (
-        <Card className="group relative">
-            <CardHeader className="transition group-hover:blur-sm">
-                <CardTitle>{name}</CardTitle>
+        <Card className="relative">
+            <CardHeader className="transition">
+                <CardTitle>
+                    <Link href={"/dashboard/" + id}>{name}</Link>
+                </CardTitle>
                 <CardDescription>{desc}</CardDescription>
             </CardHeader>
-            <CardContent className="transition group-hover:blur-sm">
+            <CardContent className="transition">
                 <div className="flex items-center gap-2">
                     <Badge
                         className={getBadgeColor(difficulty)}
@@ -58,14 +69,20 @@ function QuestionCard({
                     </p>
                 </div>
             </CardContent>
-            <div className="absolute right-5 top-5 hidden  group-hover:block">
-                {isCompleted ? <CheckCircleIcon /> : null}
-                <Star
-                    className={cn(
-                        "size-8 hover:cursor-pointer",
-                        isFavorite ? "fill-yellow-200" : null
-                    )}
-                />
+            <div className="absolute bottom-3 right-3 flex items-center gap-4">
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger>
+                            {isCompleted ? (
+                                <CheckCircleIcon className="size-8 text-green-500" />
+                            ) : null}
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>You have completed this question</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+                <AddToFavouriteButton isFavorite={isFavorite} questionId={id} />
             </div>
         </Card>
     )

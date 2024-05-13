@@ -3,6 +3,7 @@ import { Open_Sans } from "next/font/google"
 
 import "./globals.css"
 
+import ReactQueryProvider from "@/providers/react-query-provider"
 import { ClerkProvider } from "@clerk/nextjs"
 
 import Footer from "@/components/footer"
@@ -24,12 +25,14 @@ export default function RootLayout({
 }>) {
     return (
         <ClerkProvider>
-            <html lang="en">
-                <body className={open_sans.className}>
-                    {children}
-                    <Footer />
-                </body>
-            </html>
+            <ReactQueryProvider>
+                <html lang="en">
+                    <body className={open_sans.className}>
+                        {children}
+                        <Footer />
+                    </body>
+                </html>
+            </ReactQueryProvider>
         </ClerkProvider>
     )
 }
