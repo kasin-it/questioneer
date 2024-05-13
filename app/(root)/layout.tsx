@@ -1,6 +1,6 @@
-import Navbar from "@/views/Home/navbar"
+import Navbar from "@/components/navbar"
 
-export default function LandingLayout({
+export default function DashboardLayout({
     children,
 }: Readonly<{
     children: React.ReactNode

@@ -1,5 +1,5 @@
 import QuestionCard from "@/views/Dashboard/question-card"
-import { currentUser } from "@clerk/nextjs/server"
+import { auth } from "@clerk/nextjs/server"
 import { FilterIcon, ListOrderedIcon, SearchIcon } from "lucide-react"
 
 import prisma from "@/lib/db"
@@ -17,19 +17,17 @@ import {
 import { Input } from "@/components/ui/input"
 
 export default async function DashboardPage() {
-    const user = await currentUser()
+    const { userId } = await auth()
 
     const questions = await prisma.question.findMany({
         include: {
             ConnectionToQuestions: {
                 where: {
-                    userId: user?.id || undefined,
+                    userId: userId || undefined,
                 },
             },
         },
     })
-
-    console.log(questions)
 
     return (
         <main className="mx-auto w-full max-w-4xl px-4 py-12 md:px-6 md:py-16">
