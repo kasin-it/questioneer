@@ -1,14 +1,9 @@
+import QuestionCard from "@/views/Dashboard/question-card"
+import { currentUser } from "@clerk/nextjs/server"
 import { FilterIcon, ListOrderedIcon, SearchIcon } from "lucide-react"
 
-import { Badge } from "@/components/ui/badge"
+import prisma from "@/lib/db"
 import { Button } from "@/components/ui/button"
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -21,7 +16,21 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 
-export default function Component() {
+export default async function DashboardPage() {
+    const user = await currentUser()
+
+    const questions = await prisma.question.findMany({
+        include: {
+            ConnectionToQuestions: {
+                where: {
+                    userId: user?.id || undefined,
+                },
+            },
+        },
+    })
+
+    console.log(questions)
+
     return (
         <main className="mx-auto w-full max-w-4xl px-4 py-12 md:px-6 md:py-16">
             <div className="flex flex-col gap-8">
@@ -87,133 +96,34 @@ export default function Component() {
                     </DropdownMenu>
                 </div>
                 <div className="grid gap-6">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>
-                                What is the difference between let and var in
-                                JavaScript?
-                            </CardTitle>
-                            <CardDescription>
-                                Explain the differences between the let and var
-                                keywords in JavaScript, including their scope
-                                and hoisting behavior.
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="flex items-center gap-2">
-                                <Badge
-                                    className="bg-green-100 text-green-900 dark:bg-green-900/20 dark:text-green-400"
-                                    variant="outline"
-                                >
-                                    Easy
-                                </Badge>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
-                                    Added on May 1, 2023
-                                </p>
-                            </div>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>
-                                Explain the event loop in JavaScript.
-                            </CardTitle>
-                            <CardDescription>
-                                Describe how the event loop works in JavaScript,
-                                including the concepts of the call stack, task
-                                queue, and microtask queue.
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="flex items-center gap-2">
-                                <Badge
-                                    className="bg-yellow-100 text-yellow-900 dark:bg-yellow-900/20 dark:text-yellow-400"
-                                    variant="outline"
-                                >
-                                    Medium
-                                </Badge>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
-                                    Added on April 15, 2023
-                                </p>
-                            </div>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>
-                                Implement a debounce function in JavaScript.
-                            </CardTitle>
-                            <CardDescription>
-                                Write a function that implements the debounce
-                                pattern to limit the rate at which a function is
-                                called.
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="flex items-center gap-2">
-                                <Badge
-                                    className="bg-red-100 text-red-900 dark:bg-red-900/20 dark:text-red-400"
-                                    variant="outline"
-                                >
-                                    Hard
-                                </Badge>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
-                                    Added on March 20, 2023
-                                </p>
-                            </div>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>
-                                Explain the difference between synchronous and
-                                asynchronous code in JavaScript.
-                            </CardTitle>
-                            <CardDescription>
-                                Discuss the differences between synchronous and
-                                asynchronous code execution in JavaScript, and
-                                provide examples of each.
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="flex items-center gap-2">
-                                <Badge
-                                    className="bg-yellow-100 text-yellow-900 dark:bg-yellow-900/20 dark:text-yellow-400"
-                                    variant="outline"
-                                >
-                                    Medium
-                                </Badge>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
-                                    Added on February 10, 2023
-                                </p>
-                            </div>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>
-                                Implement a simple Promise in JavaScript.
-                            </CardTitle>
-                            <CardDescription>
-                                Write a function that returns a Promise and
-                                demonstrates how to handle its resolution and
-                                rejection.
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="flex items-center gap-2">
-                                <Badge
-                                    className="bg-green-100 text-green-900 dark:bg-green-900/20 dark:text-green-400"
-                                    variant="outline"
-                                >
-                                    Easy
-                                </Badge>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
-                                    Added on January 5, 2023
-                                </p>
-                            </div>
-                        </CardContent>
-                    </Card>
+                    {questions.map((question) => {
+                        let isCompleted = false
+                        let isFavourite = false
+
+                        question.ConnectionToQuestions.map((connection) => {
+                            if (isCompleted && isFavourite) {
+                                return
+                            }
+                            if (connection.userType == "completed") {
+                                isCompleted = true
+                            }
+                            if (connection.userType == "favorite") {
+                                isFavourite = true
+                            }
+                        })
+
+                        console.log(isCompleted)
+                        console.log(isFavourite)
+
+                        return (
+                            <QuestionCard
+                                {...question}
+                                key={question.id}
+                                isCompleted={isCompleted}
+                                isFavorite={isFavourite}
+                            />
+                        )
+                    })}
                 </div>
             </div>
         </main>
