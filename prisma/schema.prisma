@@ -46,7 +46,7 @@ enum Status {
 }
 
 enum Difficulty {
-  Hard
-  Medium
-  Easy
+  hard
+  medium
+  easy
 }

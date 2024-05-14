@@ -23,16 +23,16 @@ interface QuestionCardProps {
     id: number
     name: string
     desc: string | null
-    difficulty: "Medium" | "Easy" | "Hard"
+    difficulty: "medium" | "easy" | "hard"
     createdAt: Date
     isFavorite?: boolean
     isCompleted?: boolean
 }
 
 const getBadgeColor = (value: string) => {
-    if (value == "Medium") {
+    if (value == "medium") {
         return "bg-yellow-100 text-yellow-900 dark:bg-yellow-900/20 dark:text-yellow-400"
-    } else if (value == "Hard") {
+    } else if (value == "hard") {
         return "bg-red-100 text-red-900 dark:bg-red-900/20 dark:text-red-400"
     }
 
@@ -65,7 +65,7 @@ function QuestionCard({
                         {difficulty}
                     </Badge>{" "}
                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                        • {dateFormatter.format(createdAt)}
+                        • {dateFormatter.format(new Date(createdAt))}
                     </p>
                 </div>
             </CardContent>

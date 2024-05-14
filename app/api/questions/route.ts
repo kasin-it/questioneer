@@ -1,3 +1,5 @@
+import { NextResponse } from "next/server"
+import { auth } from "@clerk/nextjs/server"
 import { $Enums } from "@prisma/client"
 
 import prisma from "@/lib/db"
@@ -9,14 +11,15 @@ export async function GET(req: Request) {
         const { searchParams } = new URL(req.url)
         const query = searchParams.get("query")
         const pageStr = searchParams.get("page")
-        const sortBy = searchParams.get("sort_by")
+        const orderBy = searchParams.get("sortBy")
         const rawDifficulty = searchParams.get("difficulty")
         const pageValue = parseInt(pageStr || "1", 10)
+        const { userId } = await auth()
 
         const queryParams: {
             query?: string
             page?: number
-            sortBy?: "name" | "difficulty" | "created_at"
+            orderBy?: "name" | "difficulty" | "createdAt"
             difficulty?: $Enums.Difficulty
         } = {}
 
@@ -26,22 +29,22 @@ export async function GET(req: Request) {
             queryParams.page = pageValue
         }
 
-        if (sortBy && ["name", "difficulty", "created_at"].includes(sortBy)) {
-            queryParams.sortBy = sortBy as "name" | "difficulty" | "created_at"
+        if (orderBy && ["name", "difficulty", "createdAt"].includes(orderBy)) {
+            queryParams.orderBy = orderBy as "name" | "difficulty" | "createdAt"
         }
 
         if (
             rawDifficulty &&
-            (rawDifficulty === "Easy" ||
-                rawDifficulty === "Medium" ||
-                rawDifficulty === "Hard")
+            (rawDifficulty === "easy" ||
+                rawDifficulty === "medium" ||
+                rawDifficulty === "hard")
         ) {
             queryParams.difficulty = rawDifficulty as $Enums.Difficulty
         }
 
         const questions = await prisma.question.findMany({
             take: 30,
-            skip: (queryParams.page || 1 - 1) * 30,
+            skip: ((queryParams.page || 1) - 1) * 30, // user should input page > 0, and for the first page there should value of 0
             where: {
                 difficulty: queryParams.difficulty,
                 name: {
@@ -49,10 +52,20 @@ export async function GET(req: Request) {
                 },
             },
             orderBy: {
-                [queryParams.sortBy || "created_at"]: "desc",
+                [queryParams.orderBy || "createdAt"]: "desc",
+            },
+            include: {
+                ConnectionToQuestions: {
+                    where: {
+                        userId: userId || undefined,
+                    },
+                },
             },
         })
+
+        return NextResponse.json(questions)
     } catch (error) {
         console.error("[Error]", error)
+        return new NextResponse("Bad request", { status: 300 })
     }
 }
