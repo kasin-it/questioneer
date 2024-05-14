@@ -60,7 +60,7 @@ function AddToFavouriteButton({
                     )}
                 </TooltipTrigger>
                 <TooltipContent>
-                    {!isFavorite ? (
+                    {!isFavoriteValue ? (
                         <p>Click to make this question favorite</p>
                     ) : (
                         <p>Click to remove this question from favorites</p>

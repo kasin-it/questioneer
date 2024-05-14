@@ -30,8 +30,25 @@ const API_URL = "/api/questions"
 type DifficultyType = "easy" | "medium" | "hard" | ""
 type OrderByType = "difficulty" | "title" | "createdAt" | ""
 
+const fetchQuestions = async ({
+    query,
+    orderBy,
+    difficulty,
+}: {
+    query: string
+    orderBy: string
+    difficulty: string
+}) => {
+    const respone = await axios.get(API_URL, {
+        params: {
+            query,
+            orderBy,
+            difficulty,
+        },
+    })
+    return (respone.data as JoinedQuestion[]) || []
+}
 function QuestionsSearch({ initialQuestions }: QuestionsSearchProps) {
-    const [questions, setQuestions] = useState(initialQuestions)
     const [orderBy, setOrderBy] = useState<OrderByType>("")
     const [difficulty, setDifficulty] = useState<DifficultyType>("")
     const [queryValue, setQueryValue] = useState("") // this state controls input value
@@ -59,31 +76,11 @@ function QuestionsSearch({ initialQuestions }: QuestionsSearchProps) {
         }
     }
 
-    useEffect(() => {
-        const fetchQuestions = async () => {
-            try {
-                const respone = await axios.get(API_URL, {
-                    params: {
-                        query,
-                        orderBy,
-                        difficulty,
-                    },
-                })
-                setQuestions((respone.data as JoinedQuestion[]) || [])
-            } catch (error) {
-                console.log("Error when fetching data", error)
-                setQuestions([])
-            }
-
-            return
-        }
-        fetchQuestions()
-        // const { data } = useQuery({
-        //     queryKey: ["questionsData"],
-        //     queryFn: fetchQuestions,
-        //     initialData: questions,
-        // })
-    }, [query, orderBy, difficulty])
+    const { data } = useQuery({
+        queryKey: ["questionsData", query, orderBy, difficulty],
+        queryFn: () => fetchQuestions({ query, orderBy, difficulty }),
+        initialData: initialQuestions,
+    })
 
     return (
         <>
@@ -155,7 +152,7 @@ function QuestionsSearch({ initialQuestions }: QuestionsSearchProps) {
                 </DropdownMenu>
             </div>
             <div className="grid gap-6">
-                {questions.map((question) => {
+                {data.map((question) => {
                     let isCompleted = false
                     let isFavourite = false
                     question.ConnectionToQuestions?.map((connection) => {

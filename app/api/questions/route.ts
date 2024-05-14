@@ -11,7 +11,7 @@ export async function GET(req: Request) {
         const { searchParams } = new URL(req.url)
         const query = searchParams.get("query")
         const pageStr = searchParams.get("page")
-        const orderBy = searchParams.get("sortBy")
+        const orderBy = searchParams.get("orderBy")
         const rawDifficulty = searchParams.get("difficulty")
         const pageValue = parseInt(pageStr || "1", 10)
         const { userId } = await auth()
