@@ -63,7 +63,21 @@ export async function GET(req: Request) {
             },
         })
 
-        return NextResponse.json(questions)
+        const count = await prisma.question.count({
+            take: 30,
+            skip: (queryParams.page || 1) * 30, // user should input page > 0, and for the first page there should value of 0
+            where: {
+                difficulty: queryParams.difficulty,
+                name: {
+                    contains: queryParams.query,
+                },
+            },
+            orderBy: {
+                [queryParams.orderBy || "createdAt"]: "desc",
+            },
+        })
+
+        return NextResponse.json({ questions, hasMore: count > 0 })
     } catch (error) {
         console.error("[Error]", error)
         return new NextResponse("Bad request", { status: 300 })

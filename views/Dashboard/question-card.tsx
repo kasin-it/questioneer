@@ -57,7 +57,7 @@ function QuestionCard({
                 <CardDescription>{desc}</CardDescription>
             </CardHeader>
             <CardContent className="transition">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 capitalize">
                     <Badge
                         className={getBadgeColor(difficulty)}
                         variant="outline"
