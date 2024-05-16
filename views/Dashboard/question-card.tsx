@@ -2,7 +2,7 @@ import Link from "next/link"
 import { type QuestionTag } from "@prisma/client"
 import { CheckCircleIcon, Star } from "lucide-react"
 
-import { cn, dateFormatter } from "@/lib/utils"
+import { cn, dateFormatter, getBadgeColor } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import {
     Card,
@@ -29,16 +29,6 @@ interface QuestionCardProps {
     createdAt: Date
     isFavorite?: boolean
     isCompleted?: boolean
-}
-
-const getBadgeColor = (value: string) => {
-    if (value == "medium") {
-        return "bg-yellow-100 text-yellow-900 dark:bg-yellow-900/20 dark:text-yellow-400"
-    } else if (value == "hard") {
-        return "bg-red-100 text-red-900 dark:bg-red-900/20 dark:text-red-400"
-    }
-
-    return "bg-green-100 text-green-900 dark:bg-green-900/20 dark:text-green-400"
 }
 
 function QuestionCard({
