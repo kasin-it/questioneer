@@ -2,11 +2,12 @@
 
 import { useState } from "react"
 import QuestionCard from "@/views/Dashboard/question-card"
-import { ConnectionToQuestions, Question } from "@prisma/client"
+import { ConnectionToQuestions, Question, QuestionTag } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { FilterIcon, ListOrderedIcon, Loader2, SearchIcon } from "lucide-react"
 
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -19,7 +20,6 @@ import { Input } from "@/components/ui/input"
 import {
     Pagination,
     PaginationContent,
-    PaginationEllipsis,
     PaginationItem,
     PaginationLink,
     PaginationNext,
@@ -31,7 +31,7 @@ interface JoinedQuestion extends Question {
 }
 
 interface QuestionsSearchProps {
-    initialQuestions: JoinedQuestion[]
+    initialTags: QuestionTag[]
 }
 
 const API_URL = "/api/questions"
@@ -39,7 +39,7 @@ const API_URL = "/api/questions"
 type DifficultyType = "easy" | "medium" | "hard" | ""
 type OrderByType = "difficulty" | "title" | "createdAt" | ""
 
-function QuestionsSearch({ initialQuestions }: QuestionsSearchProps) {
+function QuestionsSearch({ initialTags }: QuestionsSearchProps) {
     const [orderBy, setOrderBy] = useState<OrderByType>("")
     const [difficulty, setDifficulty] = useState<DifficultyType>("")
     const [queryValue, setQueryValue] = useState("") // this state controls input value
@@ -167,6 +167,76 @@ function QuestionsSearch({ initialQuestions }: QuestionsSearchProps) {
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
+            <div className="mt-4 flex flex-wrap gap-2">
+                <Badge
+                    className="cursor-pointer hover:bg-gray-100/50 dark:hover:bg-gray-800/50"
+                    variant="secondary"
+                >
+                    Frontend
+                </Badge>
+                <Badge
+                    className="cursor-pointer hover:bg-gray-100/50 dark:hover:bg-gray-800/50"
+                    variant="secondary"
+                >
+                    Backend
+                </Badge>
+                <Badge
+                    className="cursor-pointer hover:bg-gray-100/50 dark:hover:bg-gray-800/50"
+                    variant="secondary"
+                >
+                    Fullstack
+                </Badge>
+                <Badge
+                    className="cursor-pointer hover:bg-gray-100/50 dark:hover:bg-gray-800/50"
+                    variant="secondary"
+                >
+                    Database
+                </Badge>
+                <Badge
+                    className="cursor-pointer hover:bg-gray-100/50 dark:hover:bg-gray-800/50"
+                    variant="secondary"
+                >
+                    DevOps
+                </Badge>
+                <Badge
+                    className="cursor-pointer hover:bg-gray-100/50 dark:hover:bg-gray-800/50"
+                    variant="secondary"
+                >
+                    Mobile
+                </Badge>
+                <Badge
+                    className="cursor-pointer hover:bg-gray-100/50 dark:hover:bg-gray-800/50"
+                    variant="secondary"
+                >
+                    QA
+                </Badge>
+                <Badge
+                    className="cursor-pointer hover:bg-gray-100/50 dark:hover:bg-gray-800/50"
+                    variant="secondary"
+                >
+                    Project Management
+                </Badge>
+                <Badge
+                    className="cursor-pointer hover:bg-gray-100/50 dark:hover:bg-gray-800/50"
+                    variant="secondary"
+                >
+                    UX/UI
+                </Badge>
+                <Badge
+                    className="cursor-pointer hover:bg-gray-100/50 dark:hover:bg-gray-800/50"
+                    variant="secondary"
+                >
+                    Data Science
+                </Badge>
+
+                <Button
+                    className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                    variant="ghost"
+                >
+                    See more
+                </Button>
+            </div>
+
             {query ? <p>Searching for: {query}</p> : null}
             {isFetching ? (
                 <div className="flex h-full min-h-52 w-full items-center justify-center">

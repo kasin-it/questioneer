@@ -14,7 +14,7 @@ export async function GET(req: Request) {
         const orderBy = searchParams.get("orderBy")
         const rawDifficulty = searchParams.get("difficulty")
         const pageValue = parseInt(pageStr || "1", 10)
-        const { userId } = await auth()
+        const { userId } = auth()
 
         const queryParams: {
             query?: string
@@ -65,7 +65,7 @@ export async function GET(req: Request) {
 
         const count = await prisma.question.count({
             take: 30,
-            skip: (queryParams.page || 1) * 30, // user should input page > 0, and for the first page there should value of 0
+            skip: (queryParams.page || 1) * 30, // counting items in the next page
             where: {
                 difficulty: queryParams.difficulty,
                 name: {

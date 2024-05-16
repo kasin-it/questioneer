@@ -21,6 +21,14 @@ model Question {
   createdAt             DateTime                @default(now())
   updatedAt             DateTime                @updatedAt
   ConnectionToQuestions ConnectionToQuestions[]
+  questionTag           QuestionTag             @relation(fields: [questionTagId], references: [id])
+  questionTagId         Int
+}
+
+model QuestionTag {
+  id        Int        @id @default(sequence())
+  name      String
+  questions Question[]
 }
 
 model User {
