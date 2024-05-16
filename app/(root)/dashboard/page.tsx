@@ -1,20 +1,11 @@
 import QuestionsSearch from "@/views/Dashboard/questions-search"
-import { auth } from "@clerk/nextjs/server"
 
 import prisma from "@/lib/db"
 
-export default async function DashboardPage() {
-    const { userId } = await auth()
+// export const dynamic = "force-static"
 
-    const questions = await prisma.question.findMany({
-        include: {
-            ConnectionToQuestions: {
-                where: {
-                    userId: userId || undefined,
-                },
-            },
-        },
-    })
+export default async function DashboardPage() {
+    const tags = await prisma.questionTag.findMany({})
 
     return (
         <main className="mx-auto w-full max-w-4xl px-4 py-12 md:px-6 md:py-16">
@@ -28,7 +19,7 @@ export default async function DashboardPage() {
                         questions.
                     </p>
                 </div>
-                <QuestionsSearch initialQuestions={questions} />
+                <QuestionsSearch initialTags={tags} />
             </div>
         </main>
     )

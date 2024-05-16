@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { type QuestionTag } from "@prisma/client"
 import { CheckCircleIcon, Star } from "lucide-react"
 
 import { cn, dateFormatter } from "@/lib/utils"
@@ -24,6 +25,7 @@ interface QuestionCardProps {
     name: string
     desc: string | null
     difficulty: "medium" | "easy" | "hard"
+    questionTag?: QuestionTag
     createdAt: Date
     isFavorite?: boolean
     isCompleted?: boolean
@@ -44,6 +46,7 @@ function QuestionCard({
     name,
     desc = "",
     difficulty,
+    questionTag,
     createdAt,
     isFavorite = false,
     isCompleted = false,
@@ -57,16 +60,21 @@ function QuestionCard({
                 <CardDescription>{desc}</CardDescription>
             </CardHeader>
             <CardContent className="transition">
-                <div className="flex items-center gap-2 capitalize">
+                <div className="flex items-center gap-2 text-sm capitalize text-gray-500 dark:text-gray-400">
                     <Badge
                         className={getBadgeColor(difficulty)}
                         variant="outline"
                     >
                         {difficulty}
-                    </Badge>{" "}
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                        • {dateFormatter.format(new Date(createdAt))}
-                    </p>
+                    </Badge>
+                    {questionTag ? (
+                        <>
+                            <p>•</p>
+                            <p className="font-semibold">{questionTag.name}</p>
+                        </>
+                    ) : null}
+                    <p>•</p>
+                    <p>{dateFormatter.format(new Date(createdAt))}</p>
                 </div>
             </CardContent>
             <div className="absolute bottom-3 right-3 flex items-center gap-4">

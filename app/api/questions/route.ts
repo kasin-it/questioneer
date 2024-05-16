@@ -13,12 +13,14 @@ export async function GET(req: Request) {
         const pageStr = searchParams.get("page")
         const orderBy = searchParams.get("orderBy")
         const rawDifficulty = searchParams.get("difficulty")
-        const pageValue = parseInt(pageStr || "1", 10)
+        const tag = searchParams.get("tag")
+        const pageValue = parseInt(pageStr || "1")
         const { userId } = auth()
 
         const queryParams: {
             query?: string
             page?: number
+            tag?: string
             orderBy?: "name" | "difficulty" | "createdAt"
             difficulty?: $Enums.Difficulty
         } = {}
@@ -42,34 +44,47 @@ export async function GET(req: Request) {
             queryParams.difficulty = rawDifficulty as $Enums.Difficulty
         }
 
+        if (tag) {
+            queryParams.tag = tag
+        }
+
         const questions = await prisma.question.findMany({
-            take: 30,
-            skip: ((queryParams.page || 1) - 1) * 30, // user should input page > 0, and for the first page there should value of 0
+            take: parseInt(process.env.PAGINATION!),
+            skip:
+                ((queryParams.page || 1) - 1) *
+                parseInt(process.env.PAGINATION!), // user should input page > 0, and for the first page there should value of 0
             where: {
                 difficulty: queryParams.difficulty,
                 name: {
                     contains: queryParams.query,
+                },
+                questionTag: {
+                    name: tag || undefined,
                 },
             },
             orderBy: {
                 [queryParams.orderBy || "createdAt"]: "desc",
             },
             include: {
-                ConnectionToQuestions: {
+                connectionToQuestions: {
                     where: {
                         userId: userId || undefined,
                     },
                 },
+                questionTag: true,
             },
         })
 
         const count = await prisma.question.count({
-            take: 30,
-            skip: (queryParams.page || 1) * 30, // counting items in the next page
+            take: parseInt(process.env.PAGINATION!),
+            skip: (queryParams.page || 1) * parseInt(process.env.PAGINATION!), // counting items in the next page
             where: {
                 difficulty: queryParams.difficulty,
                 name: {
                     contains: queryParams.query,
+                },
+                questionTag: {
+                    name: tag || undefined,
                 },
             },
             orderBy: {

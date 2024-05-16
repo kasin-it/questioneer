@@ -20,7 +20,7 @@ model Question {
   difficulty            Difficulty
   createdAt             DateTime                @default(now())
   updatedAt             DateTime                @updatedAt
-  ConnectionToQuestions ConnectionToQuestions[]
+  connectionToQuestions ConnectionToQuestions[]
   questionTag           QuestionTag             @relation(fields: [questionTagId], references: [id])
   questionTagId         Int
 }
@@ -34,7 +34,7 @@ model QuestionTag {
 model User {
   id                 String                  @id
   email              String                  @unique
-  CompletedQuestions ConnectionToQuestions[]
+  completedQuestions ConnectionToQuestions[]
 }
 
 model ConnectionToQuestions {
