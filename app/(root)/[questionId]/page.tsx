@@ -1,12 +1,13 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import AddToFavouriteButton from "@/views/Dashboard/add-to-favourite-button"
+import GetFeedbackForm from "@/views/QuestionPage/get-feedback-form"
 import { auth } from "@clerk/nextjs/server"
 import { ArrowLeftIcon, CheckCircleIcon } from "lucide-react"
 
 import prisma from "@/lib/db"
-import { dateFormatter, getBadgeColor } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
+import { dateFormatter } from "@/lib/utils"
+import DifficultyBadge from "@/components/ui/difficulty-badge"
 import {
     Tooltip,
     TooltipContent,
@@ -27,7 +28,7 @@ export default async function QuestionPage({
 }: {
     params: { questionId: string }
 }) {
-    const { userId } = await auth()
+    const { userId } = auth()
 
     const questionId = parseInt(params.questionId)
 
@@ -63,12 +64,9 @@ export default async function QuestionPage({
         <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
             <div className="mb-4 flex items-center justify-between">
                 <div className="flex items-center gap-2 capitalize">
-                    <Badge
-                        className={getBadgeColor(question.difficulty)}
-                        variant="outline"
-                    >
+                    <DifficultyBadge difficulty={question.difficulty}>
                         {question.difficulty}
-                    </Badge>{" "}
+                    </DifficultyBadge>
                     <p>•</p>
                     <p className="font-semibold">{question.questionTag.name}</p>
                     <p>•</p>
@@ -78,7 +76,7 @@ export default async function QuestionPage({
                 </div>
                 <Link
                     className="rounded-md bg-gray-200 px-3 py-2 text-gray-700 transition-colors hover:bg-gray-300"
-                    href="/dashboard"
+                    href="/"
                 >
                     <ArrowLeftIcon className="h-5 w-5" />
                     <span className="sr-only">Go Back</span>
@@ -113,20 +111,10 @@ export default async function QuestionPage({
                 </section>
             </div>
 
-            <div className="mt-8">
-                <label
-                    className="mb-2 block font-medium text-gray-700"
-                    htmlFor="answer"
-                >
-                    Your Answer:
-                </label>
-                <textarea
-                    className="min-h-24 w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    id="answer"
-                    placeholder="Enter your answer here..."
-                    rows={6}
-                />
-            </div>
+            <GetFeedbackForm
+                isAuthenticated={userId ? true : false}
+                questionId={question.id}
+            />
             <div className="mt-8">
                 <h2 className="mb-4 text-2xl font-bold">Related Questions</h2>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

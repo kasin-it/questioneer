@@ -6,7 +6,7 @@ import Logo from "./logo"
 import { buttonVariants } from "./ui/button"
 
 async function Navbar() {
-    const { userId } = await auth()
+    const { userId } = auth()
     return (
         <header className="w-full border-b">
             <nav className="container flex w-full items-center justify-between py-5 text-xl">

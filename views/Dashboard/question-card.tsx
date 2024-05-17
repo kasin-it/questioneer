@@ -2,8 +2,7 @@ import Link from "next/link"
 import { type QuestionTag } from "@prisma/client"
 import { CheckCircleIcon, Star } from "lucide-react"
 
-import { cn, dateFormatter, getBadgeColor } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
+import { dateFormatter } from "@/lib/utils"
 import {
     Card,
     CardContent,
@@ -11,6 +10,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import DifficultyBadge from "@/components/ui/difficulty-badge"
 import {
     Tooltip,
     TooltipContent,
@@ -45,18 +45,15 @@ function QuestionCard({
         <Card className="relative">
             <CardHeader className="transition">
                 <CardTitle>
-                    <Link href={"/dashboard/" + id}>{name}</Link>
+                    <Link href={"/" + id}>{name}</Link>
                 </CardTitle>
                 <CardDescription>{desc}</CardDescription>
             </CardHeader>
             <CardContent className="transition">
                 <div className="flex items-center gap-2 text-sm capitalize text-gray-500 dark:text-gray-400">
-                    <Badge
-                        className={getBadgeColor(difficulty)}
-                        variant="outline"
-                    >
+                    <DifficultyBadge difficulty={difficulty}>
                         {difficulty}
-                    </Badge>
+                    </DifficultyBadge>
                     {questionTag ? (
                         <>
                             <p>•</p>

@@ -1,15 +1,14 @@
 "use server"
 
-import { NextResponse } from "next/server"
 import { auth } from "@clerk/nextjs/server"
 
 import prisma from "@/lib/db"
 
 export async function toggleFavorite(questionId: number, isFavorite: boolean) {
-    const { userId } = await auth()
+    const { userId } = auth()
 
     if (!questionId || !userId) {
-        return new NextResponse("Error", { status: 400 })
+        return false
     }
 
     if (isFavorite) {
@@ -23,7 +22,7 @@ export async function toggleFavorite(questionId: number, isFavorite: boolean) {
             })
         } catch (error) {
             console.log(error)
-            return new NextResponse("Error", { status: 500 })
+            return false
         }
     } else {
         try {
@@ -36,7 +35,18 @@ export async function toggleFavorite(questionId: number, isFavorite: boolean) {
             })
         } catch (error) {
             console.log(error)
-            return new NextResponse("Error", { status: 500 })
+            return false
         }
+    }
+
+    return true
+}
+
+export async function getFeedback(prevState: any, formData: FormData) {
+    const { userId } = auth()
+
+    return {
+        approved: false,
+        feedback: "not good",
     }
 }

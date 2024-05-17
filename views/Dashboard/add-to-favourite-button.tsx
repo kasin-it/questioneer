@@ -1,6 +1,7 @@
 "use client"
 
-import { useActionState, useState } from "react"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { toggleFavorite } from "@/actions"
 import { useAuth } from "@clerk/nextjs"
 import { Star } from "lucide-react"
@@ -24,6 +25,7 @@ function AddToFavouriteButton({
 }: AddToFavouriteButtonProps) {
     const [isFavoriteValue, setIsFavoriteValue] = useState(isFavorite)
     const { userId } = useAuth()
+    const router = useRouter()
 
     return (
         <TooltipProvider>
@@ -33,11 +35,16 @@ function AddToFavouriteButton({
                         <Star
                             onClick={async () => {
                                 setIsFavoriteValue((prev) => !prev)
+
                                 try {
-                                    await toggleFavorite(
+                                    const res = await toggleFavorite(
                                         questionId,
                                         isFavoriteValue // we want the previous value
                                     )
+
+                                    if (res == false) {
+                                        setIsFavoriteValue((prev) => !prev)
+                                    }
                                 } catch (error) {
                                     console.log(error)
                                     setIsFavoriteValue((prev) => !prev)
@@ -54,7 +61,7 @@ function AddToFavouriteButton({
                     ) : (
                         <Star
                             strokeWidth={"1px"}
-                            onClick={() => console.log("open modal")}
+                            onClick={() => router.push("/sign-in")}
                             className={"block size-8 hover:cursor-pointer"}
                         />
                     )}

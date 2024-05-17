@@ -1,16 +1,26 @@
-import CTA from "@/views/Home/cta"
-import Features from "@/views/Home/features"
-import Hero from "@/views/Home/hero"
-import Reviews from "@/views/Home/reviews"
+import QuestionsSearch from "@/views/Dashboard/questions-search"
 
-function Home() {
+import prisma from "@/lib/db"
+
+// export const dynamic = "force-static"
+
+export default async function DashboardPage() {
+    const tags = await prisma.questionTag.findMany({})
+
     return (
-        <main className="flex-1">
-            <Hero />
-            <Features />
-            <Reviews />
-            <CTA />
+        <main className="mx-auto w-full max-w-4xl px-4 py-12 md:px-6 md:py-16">
+            <div className="flex flex-col gap-8">
+                <div>
+                    <h1 className="text-3xl font-bold tracking-tight">
+                        Interview Questions
+                    </h1>
+                    <p className="text-gray-500 dark:text-gray-400">
+                        Prepare for your next interview with our curated list of
+                        questions.
+                    </p>
+                </div>
+                <QuestionsSearch initialTags={tags} />
+            </div>
         </main>
     )
 }
-export default Home
