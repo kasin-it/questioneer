@@ -1,9 +1,9 @@
 "use client"
 
-import { useActionState, useTransition } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { getFeedback } from "@/actions"
-import { CircleXIcon } from "lucide-react"
+import { CircleCheckIcon, CircleXIcon, Loader2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -21,16 +21,42 @@ interface GetFeedbackFormProps {
     questionId: number
 }
 
-const initialState = {
-    approved: false,
-    feedback: "",
-}
 function GetFeedbackForm({
     questionId,
     isAuthenticated,
 }: GetFeedbackFormProps) {
     const router = useRouter()
-    const [state, formAction] = useActionState(getFeedback, initialState)
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [isApproved, setIsApproved] = useState(true)
+    const [feedback, setFeedback] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
+    const [answer, setAnswer] = useState("")
+
+    const handleFormSubmit = async () => {
+        if (!answer.trim()) {
+            return // Do nothing if answer is empty
+        }
+
+        setIsLoading(true)
+
+        try {
+            const response = await getFeedback(questionId, answer)
+            const { approved, error, feedback } = response
+
+            if (error) {
+                console.error(error)
+                return
+            }
+
+            setIsApproved(approved)
+            setFeedback(feedback || "")
+            setIsModalOpen(true)
+        } catch (error) {
+            console.error("Submission failed:", error)
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     if (!isAuthenticated) {
         return (
@@ -48,8 +74,11 @@ function GetFeedbackForm({
                     rows={6}
                     onClick={() => router.push("/sign-in")}
                 />
-
-                <Button onClick={() => router.push("/sign-in")}>
+                <Button
+                    onClick={() => router.push("/sign-in")}
+                    disabled={isLoading}
+                >
+                    {isLoading && <Loader2 className="mr-2 animate-spin" />}{" "}
                     Check your answer
                 </Button>
             </div>
@@ -58,45 +87,54 @@ function GetFeedbackForm({
 
     return (
         <>
-            <Dialog open={state.feedback.length != 0}>
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
-                        <DialogTitle>AI Response Feedback</DialogTitle>
+                        <DialogTitle>AI Feedback</DialogTitle>
                     </DialogHeader>
-                    <div className="py-6">
+                    <div className="py-6 text-center">
                         <div className="flex items-center justify-center">
-                            <CircleXIcon className="h-12 w-12 text-red-500" />
+                            {isApproved ? (
+                                <CircleCheckIcon className="size-12 text-green-500" />
+                            ) : (
+                                <CircleXIcon className="size-12 text-red-500" />
+                            )}
                         </div>
-                        <div className="mt-4 text-center">
+                        <div className="mt-4">
                             <p className="text-lg font-medium">
-                                Response Disapproved
+                                {isApproved
+                                    ? "Response Approved"
+                                    : "Response Disapproved"}
                             </p>
                             <p className="mt-2 text-gray-500 dark:text-gray-400">
-                                The AI-generated response does not meet the
-                                requirements and has been disapproved for use.
+                                {isApproved
+                                    ? "Congratulations! Your response meets our requirements!"
+                                    : "Unfortunately, your response doesn't meet our requirements."}
                             </p>
                         </div>
-                        <div className="mt-6 text-center">
-                            <p className="text-lg font-medium">
-                                How to Improve
-                            </p>
-                            <p className="mt-2 text-gray-500 dark:text-gray-400">
-                                To improve the AI response, please ensure that
-                                it follows the provided rules and guidelines
-                                closely. Pay attention to the use of Tailwind
-                                classes, component hierarchy, and overall design
-                                consistency. Additionally, consider adding more
-                                creative and unique elements to make the
-                                response more visually appealing and engaging.
-                            </p>
-                        </div>
+                        {feedback && (
+                            <div className="mt-6">
+                                <p className="text-lg font-medium">
+                                    How to Improve
+                                </p>
+                                <p className="mt-2 text-gray-500 dark:text-gray-400">
+                                    {feedback}
+                                </p>
+                            </div>
+                        )}
                     </div>
                     <DialogFooter>
-                        <Button type="button">Close</Button>
+                        <Button
+                            type="button"
+                            onClick={() => setIsModalOpen(false)}
+                        >
+                            Close
+                        </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-            <form className="mt-8 flex flex-col gap-2" action={formAction}>
+
+            <div className="mt-8 flex flex-col gap-2">
                 <Label
                     className="mb-2 block font-medium text-gray-700"
                     htmlFor="answer"
@@ -108,16 +146,16 @@ function GetFeedbackForm({
                     id="answer"
                     placeholder="Enter your answer here..."
                     rows={6}
+                    value={answer}
+                    onChange={(e) => setAnswer(e.target.value)}
                 />
-                <input
-                    type="hidden"
-                    className="hidden"
-                    value={questionId}
-                    id="questionId"
-                />
-                <Button>Check your answer</Button>
-            </form>
+                <Button onClick={handleFormSubmit} disabled={isLoading}>
+                    {isLoading && <Loader2 className="mr-2 animate-spin" />}{" "}
+                    Check your answer
+                </Button>
+            </div>
         </>
     )
 }
+
 export default GetFeedbackForm
