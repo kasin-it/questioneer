@@ -68,6 +68,14 @@ export async function getFeedback(questionId: number, answer: string) {
 
     const question = await prisma.question.findFirst({
         where: { id: questionId },
+        include: {
+            connectionToQuestions: {
+                where: {
+                    userId: userId,
+                    status: "completed",
+                },
+            },
+        },
     })
 
     if (!question) {
@@ -115,6 +123,16 @@ export async function getFeedback(questionId: number, answer: string) {
             .replace("[APPROVED]", "")
             .replace("[DISAPPROVED]", "")
             .trim()
+
+        if (isApproved && question.connectionToQuestions.length == 0) {
+            await prisma.connectionToQuestions.create({
+                data: {
+                    userId: userId,
+                    questionId: question.id,
+                    status: "completed",
+                },
+            })
+        }
 
         return {
             approved: isApproved,
