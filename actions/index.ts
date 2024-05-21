@@ -5,7 +5,6 @@ import { auth } from "@clerk/nextjs/server"
 import axios from "axios"
 
 import prisma from "@/lib/db"
-import { replicate } from "@/lib/replicate"
 
 export async function toggleFavorite(questionId: number, isFavorite: boolean) {
     const { userId } = auth()
@@ -50,11 +49,6 @@ export async function getFeedback(questionId: number, answer: string) {
 
     if (!userId) {
         redirect("/sign-in")
-        return {
-            approved: false,
-            feedback: "",
-            error: "User not authenticated",
-        }
     }
 
     if (!answer || Number.isNaN(questionId)) {
@@ -88,7 +82,7 @@ export async function getFeedback(questionId: number, answer: string) {
             }
         }
 
-        const input = `Please review my answer to the question "${question.name}" and tell me if I answered it correctly. Your response must start with [APPROVED] or [DISAPPROVED],dont add any interpuction to the tag, followed by short feedback on my answer. Do not describe my answer itself; only provide feedback on what I can improve or what's wrong with my answer. Answer: "${answer}"`
+        const input = `Please review my answer to the question "${question.name}" and tell me if I answered it correctly. Your response must start with [APPROVED] or [DISAPPROVED],dont add any interpuction to the tag, followed by short feedback on my answer. Do not describe my answer itself; only provide feedback on what I can improve or what&apos;s wrong with my answer. Answer: "${answer}"`
 
         const options = {
             url: "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2",

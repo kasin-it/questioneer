@@ -42,15 +42,15 @@ export default function PostPage() {
                         <p>
                             Jokester began sneaking into the castle in the
                             middle of the night and leaving jokes all over the
-                            place: under the king's pillow, in his soup, even in
-                            the royal toilet. The king was furious, but he
-                            couldn't seem to stop Jokester.
+                            place: under the king&apos;s pillow, in his soup,
+                            even in the royal toilet. The king was furious, but
+                            he couldn&apos;t seem to stop Jokester.
                         </p>
                         <p>
                             And then, one day, the people of the kingdom
                             discovered that the jokes left by Jokester were so
-                            funny that they couldn't help but laugh. And once
-                            they started laughing, they couldn't stop.
+                            funny that they couldn&apos;t help but laugh. And
+                            once they started laughing, they couldn&apos;t stop.
                         </p>
                         <figure>
                             <Image
@@ -72,13 +72,13 @@ export default function PostPage() {
                         </p>
                         <blockquote className="my-4 border-s-4 border-gray-300 bg-gray-50 p-4 dark:border-gray-500 dark:bg-gray-800">
                             “After all,” he said, “everyone enjoys a good joke,
-                            so it's only fair that they should pay for the
+                            so it&apos;s only fair that they should pay for the
                             privilege.”
                         </blockquote>
                         <h3>The Joke Tax</h3>
                         <p>
-                            The king's subjects were not amused. They grumbled
-                            and complained, but the king was firm:
+                            The king&apos;s subjects were not amused. They
+                            grumbled and complained, but the king was firm:
                         </p>
                         <ul className="max-w-md list-inside list-disc space-y-1 text-gray-500 dark:text-gray-400">
                             <li>1st level of puns: 5 gold coins</li>
@@ -88,8 +88,8 @@ export default function PostPage() {
                         <p>
                             As a result, people stopped telling jokes, and the
                             kingdom fell into a gloom. But there was one person
-                            who refused to let the king's foolishness get him
-                            down: a court jester named Jokester.
+                            who refused to let the king&apos;s foolishness get
+                            him down: a court jester named Jokester.
                         </p>
                     </article>
                     <div className="space-y-8">
@@ -109,8 +109,8 @@ export default function PostPage() {
                                 </Link>
                                 <Link className="grid gap-2" href="#">
                                     <h4 className="text-lg font-medium">
-                                        Jokester's Revenge: A Tale of Laughter
-                                        and Liberation
+                                        Jokester&apos;s Revenge: A Tale of
+                                        Laughter and Liberation
                                     </h4>
                                     <p className="text-sm text-gray-500 dark:text-gray-400">
                                         Read about how Jokester fought back
@@ -126,7 +126,7 @@ export default function PostPage() {
                                     <p className="text-sm text-gray-500 dark:text-gray-400">
                                         Dive into the financial implications of
                                         the Joke Tax and how it affected the
-                                        kingdom's economy.
+                                        kingdom&apos;s economy.
                                     </p>
                                 </Link>
                             </CardContent>
@@ -164,8 +164,8 @@ export default function PostPage() {
                                             insightful story! I love how the
                                             king tried to tax the jokes, but
                                             Jokester found a way to fight back.
-                                            Can't wait to read more about the
-                                            kingdom's adventures.
+                                            Can&apos;t wait to read more about
+                                            the kingdom&apos;s adventures.
                                         </p>
                                     </div>
                                     <div className="grid gap-2">
@@ -193,8 +193,8 @@ export default function PostPage() {
                                         <p>
                                             The Joke Tax is such a clever
                                             concept! I can see how it would have
-                                            a huge impact on the kingdom's
-                                            culture and economy. I'm really
+                                            a huge impact on the kingdom&apos;s
+                                            culture and economy. I&apos;m really
                                             interested to learn more about how
                                             the people responded to it.
                                         </p>

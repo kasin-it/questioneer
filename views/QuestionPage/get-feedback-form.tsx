@@ -109,7 +109,7 @@ function GetFeedbackForm({
                             <p className="mt-2 text-gray-500 dark:text-gray-400">
                                 {isApproved
                                     ? "Congratulations! Your response meets our requirements!"
-                                    : "Unfortunately, your response doesn't meet our requirements."}
+                                    : "Unfortunately, your response doesn&apos;t meet our requirements."}
                             </p>
                         </div>
                         {feedback && (

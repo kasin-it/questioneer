@@ -2,6 +2,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import AddToFavouriteButton from "@/views/Dashboard/add-to-favourite-button"
 import GetFeedbackForm from "@/views/QuestionPage/get-feedback-form"
+import RelatedQuestion from "@/views/QuestionPage/related-question"
 import { auth } from "@clerk/nextjs/server"
 import { ArrowLeftIcon, CheckCircleIcon } from "lucide-react"
 
@@ -14,14 +15,6 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-
-export async function generateStaticParams() {
-    const questions = await prisma.question.findMany()
-
-    return questions.map((question) => ({
-        slug: question.id,
-    }))
-}
 
 export default async function QuestionPage({
     params,
@@ -49,6 +42,16 @@ export default async function QuestionPage({
     if (!question) {
         notFound()
     }
+
+    const relatedQuestions = await prisma.question.findMany({
+        where: {
+            questionTagId: question.questionTagId,
+            id: {
+                not: question.id,
+            },
+        },
+        take: 3,
+    })
 
     const isCompleted =
         question?.connectionToQuestions.find(
@@ -115,56 +118,18 @@ export default async function QuestionPage({
                 isAuthenticated={userId ? true : false}
                 questionId={question.id}
             />
-            <div className="mt-8">
-                <h2 className="mb-4 text-2xl font-bold">Related Questions</h2>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    <div className="rounded-md bg-gray-100 p-4">
-                        <h3 className="mb-2 text-lg font-bold">
-                            Depth-First Search (DFS)
-                        </h3>
-                        <p className="mb-4 text-gray-700">
-                            Implement a Depth-First Search (DFS) algorithm to
-                            traverse a graph.
-                        </p>
-                        <Link
-                            className="rounded-md bg-blue-500 px-3 py-2 text-white transition-colors hover:bg-blue-600"
-                            href="#"
-                        >
-                            View Question
-                        </Link>
-                    </div>
-                    <div className="rounded-md bg-gray-100 p-4">
-                        <h3 className="mb-2 text-lg font-bold">
-                            Topological Sort
-                        </h3>
-                        <p className="mb-4 text-gray-700">
-                            Implement a Topological Sort algorithm to sort the
-                            nodes of a directed acyclic graph (DAG).
-                        </p>
-                        <Link
-                            className="rounded-md bg-blue-500 px-3 py-2 text-white transition-colors hover:bg-blue-600"
-                            href="#"
-                        >
-                            View Question
-                        </Link>
-                    </div>
-                    <div className="rounded-md bg-gray-100 p-4">
-                        <h3 className="mb-2 text-lg font-bold">
-                            Dijkstra's Algorithm
-                        </h3>
-                        <p className="mb-4 text-gray-700">
-                            Implement Dijkstra's algorithm to find the shortest
-                            path between two nodes in a weighted graph.
-                        </p>
-                        <Link
-                            className="rounded-md bg-blue-500 px-3 py-2 text-white transition-colors hover:bg-blue-600"
-                            href="#"
-                        >
-                            View Question
-                        </Link>
+            {relatedQuestions.length != 0 ? (
+                <div className="mt-8">
+                    <h2 className="mb-4 text-2xl font-bold">
+                        Related Questions
+                    </h2>
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        {relatedQuestions.map((relatedQuestion) => (
+                            <RelatedQuestion question={relatedQuestion} />
+                        ))}
                     </div>
                 </div>
-            </div>
+            ) : null}
         </div>
     )
 }
