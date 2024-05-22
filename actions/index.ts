@@ -42,6 +42,7 @@ export async function toggleFavorite(questionId: number, isFavorite: boolean) {
         }
     }
     revalidatePath("/" + questionId)
+    revalidatePath("/my-profile")
 
     return true
 }
@@ -123,6 +124,9 @@ export async function getFeedback(questionId: number, answer: string) {
                 },
             })
         }
+
+        revalidatePath("/" + questionId)
+        revalidatePath("/my-profile")
 
         return {
             approved: isApproved,

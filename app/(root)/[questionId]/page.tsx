@@ -6,7 +6,7 @@ import AddToFavouriteButton from "@/views/Dashboard/add-to-favourite-button"
 import GetFeedbackForm from "@/views/QuestionPage/get-feedback-form"
 import RelatedQuestion from "@/views/QuestionPage/related-question"
 import { auth } from "@clerk/nextjs/server"
-import { ArrowLeftIcon, CheckCircleIcon } from "lucide-react"
+import { ArrowLeftIcon, CheckCircleIcon, Star } from "lucide-react"
 
 import prisma from "@/lib/db"
 import { dateFormatter } from "@/lib/utils"
@@ -37,11 +37,29 @@ export default async function QuestionPage({
             questionTag: true,
             connectionToQuestions: {
                 where: {
-                    userId: userId || undefined,
+                    status: "favorite",
                 },
             },
         },
     })
+
+    let isFavorite = false
+    let isCompleted = false
+
+    const amountOfFavourites = question?.connectionToQuestions.reduce(
+        (acc, value) => {
+            if (value.status == "favorite") {
+                acc += 1
+                if (value.userId == userId) {
+                    isFavorite = true
+                }
+            } else if (value.status == "completed" && value.userId == userId) {
+                isCompleted = true
+            }
+            return acc
+        },
+        0
+    )
 
     if (!question) {
         notFound()
@@ -57,16 +75,6 @@ export default async function QuestionPage({
         take: 3,
     })
 
-    const isCompleted =
-        question?.connectionToQuestions.find(
-            (connection) => connection.status === "completed"
-        ) !== undefined
-
-    const isFavorite =
-        question?.connectionToQuestions.find(
-            (connection) => connection.status === "favorite"
-        ) !== undefined
-
     return (
         <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
             <div className="mb-4 flex items-center justify-between">
@@ -76,6 +84,11 @@ export default async function QuestionPage({
                     </DifficultyBadge>
                     <p>•</p>
                     <p className="font-semibold">{question.questionTag.name}</p>
+                    <p>•</p>
+                    <p className="flex items-center font-semibold">
+                        <Star className="size-5 fill-yellow-500 text-yellow-500" />{" "}
+                        {amountOfFavourites}
+                    </p>
                     <p>•</p>
                     <p className="text-foreground-muted">
                         {dateFormatter.format(new Date(question.createdAt))}
