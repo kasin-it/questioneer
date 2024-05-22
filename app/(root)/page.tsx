@@ -2,7 +2,7 @@ import QuestionsSearch from "@/views/Dashboard/questions-search"
 
 import prisma from "@/lib/db"
 
-// export const dynamic = "force-static"
+export const dynamic = "force-dynamic"
 
 export default async function DashboardPage() {
     const tags = await prisma.questionTag.findMany({})

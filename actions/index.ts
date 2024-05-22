@@ -1,5 +1,6 @@
 "use server"
 
+import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { auth } from "@clerk/nextjs/server"
 import axios from "axios"
@@ -40,6 +41,7 @@ export async function toggleFavorite(questionId: number, isFavorite: boolean) {
             return false
         }
     }
+    revalidatePath("/" + questionId)
 
     return true
 }

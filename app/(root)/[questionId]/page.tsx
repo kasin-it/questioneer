@@ -1,3 +1,5 @@
+import { cache } from "react"
+import next from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import AddToFavouriteButton from "@/views/Dashboard/add-to-favourite-button"
@@ -15,6 +17,8 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+
+export const dynamic = "force-dynamic"
 
 export default async function QuestionPage({
     params,
