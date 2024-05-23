@@ -27,7 +27,7 @@ interface QuestionsSearchProps {
 const API_URL = "/api/questions"
 
 function QuestionsSearch({ initialTags }: QuestionsSearchProps) {
-    const { orderBy, difficulty, query, page, tag, setHasMore } =
+    const { orderBy, difficulty, query, page, tag, sortDirection, setHasMore } =
         useFilterQuestions()
 
     const fetchQuestions = async ({
@@ -35,12 +35,14 @@ function QuestionsSearch({ initialTags }: QuestionsSearchProps) {
         orderBy,
         difficulty,
         page,
+        sortDirection,
         tag,
     }: {
         query: string
         orderBy: string
         difficulty: string
         page: number
+        sortDirection: boolean
         tag: string
     }) => {
         const respone = await axios.get(API_URL, {
@@ -50,6 +52,7 @@ function QuestionsSearch({ initialTags }: QuestionsSearchProps) {
                 difficulty,
                 page,
                 tag,
+                sortDirection,
             },
         })
         setHasMore(respone.data.hasMore)
@@ -57,9 +60,24 @@ function QuestionsSearch({ initialTags }: QuestionsSearchProps) {
     }
 
     const { data, isError, isFetching } = useQuery({
-        queryKey: ["questionsData", query, orderBy, difficulty, page, tag],
+        queryKey: [
+            "questionsData",
+            query,
+            orderBy,
+            difficulty,
+            page,
+            tag,
+            sortDirection,
+        ],
         queryFn: () =>
-            fetchQuestions({ query, orderBy, difficulty, page, tag }),
+            fetchQuestions({
+                query,
+                orderBy,
+                difficulty,
+                page,
+                tag,
+                sortDirection,
+            }),
         initialData: [],
     })
 

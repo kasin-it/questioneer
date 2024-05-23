@@ -1,7 +1,13 @@
 "use client"
 
 import { QuestionTag } from "@prisma/client"
-import { FilterIcon, ListOrderedIcon, SearchIcon } from "lucide-react"
+import {
+    FilterIcon,
+    ListOrderedIcon,
+    SearchIcon,
+    SortAsc,
+    SortDesc,
+} from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import {
@@ -31,11 +37,13 @@ function QuestionsFilters({ initialTags }: QuestionsFiltersProps) {
         queryValue,
         query,
         tag,
+        sortDirection,
         setOrderBy,
         setDifficulty,
         setQueryValue,
         setQuery,
         setTag,
+        toogleSortDirection,
     } = useFilterQuestions()
 
     const handleOrderByChange = (value: OrderByType) => {
@@ -62,11 +70,16 @@ function QuestionsFilters({ initialTags }: QuestionsFiltersProps) {
         }
     }
 
+    const handleSortDirectionChange = () => {
+        toogleSortDirection()
+    }
+
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") {
             setQuery(queryValue)
         }
     }
+
     return (
         <>
             <div className="grid gap-0">
@@ -140,6 +153,18 @@ function QuestionsFilters({ initialTags }: QuestionsFiltersProps) {
                             </DropdownMenuRadioGroup>
                         </DropdownMenuContent>
                     </DropdownMenu>
+                    <Button
+                        size={"icon"}
+                        variant={"outline"}
+                        className="p-2"
+                        onClick={handleSortDirectionChange}
+                    >
+                        {sortDirection ? (
+                            <SortAsc className="size-5" />
+                        ) : (
+                            <SortDesc className="size-5" />
+                        )}
+                    </Button>
                 </div>
                 <div className="mt-4 flex flex-wrap gap-2">
                     {initialTags.map((tagItem) => (
@@ -157,13 +182,6 @@ function QuestionsFilters({ initialTags }: QuestionsFiltersProps) {
                             {tagItem.name}
                         </Badge>
                     ))}
-
-                    {/* <Button
-                        className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                        variant="ghost"
-                    >
-                        See more
-                    </Button> */}
                 </div>
             </div>
 

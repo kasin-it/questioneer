@@ -35,11 +35,7 @@ export default async function QuestionPage({
         },
         include: {
             questionTag: true,
-            connectionToQuestions: {
-                where: {
-                    status: "favorite",
-                },
-            },
+            connectionToQuestions: true,
         },
     })
 

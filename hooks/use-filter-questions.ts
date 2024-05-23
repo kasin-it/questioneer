@@ -10,6 +10,7 @@ interface FilterQuestionsStore {
     query: string
     page: number
     tag: string
+    sortDirection: boolean
     hasMore: boolean
 
     setOrderBy: (value: OrderByType) => void
@@ -20,6 +21,7 @@ interface FilterQuestionsStore {
     incrementPage: () => void
     decrementPage: () => void
     setTag: (value: string) => void
+    toogleSortDirection: () => void
     setHasMore: (value: boolean) => void
 }
 
@@ -30,6 +32,7 @@ export const useFilterQuestions = create<FilterQuestionsStore>((set) => ({
     query: "",
     page: 1,
     tag: "",
+    sortDirection: false,
     hasMore: true,
 
     setOrderBy: (value) => set(() => ({ orderBy: value })),
@@ -41,5 +44,7 @@ export const useFilterQuestions = create<FilterQuestionsStore>((set) => ({
     decrementPage: () =>
         set((state) => ({ page: Math.max(1, state.page - 1) })),
     setTag: (value) => set(() => ({ tag: value })),
+    toogleSortDirection: () =>
+        set((state) => ({ sortDirection: !state.sortDirection })),
     setHasMore: (value) => set(() => ({ hasMore: value })),
 }))

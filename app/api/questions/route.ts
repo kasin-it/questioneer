@@ -14,6 +14,7 @@ export async function GET(req: Request) {
         const orderBy = searchParams.get("orderBy")
         const rawDifficulty = searchParams.get("difficulty")
         const tag = searchParams.get("tag")
+        const sortDirection = searchParams.get("sortDirection")
         const pageValue = parseInt(pageStr || "1")
         const { userId } = auth()
 
@@ -23,6 +24,7 @@ export async function GET(req: Request) {
             tag?: string
             orderBy?: "name" | "difficulty" | "createdAt"
             difficulty?: $Enums.Difficulty
+            sortDirection?: "asc" | "desc"
         } = {}
 
         if (query) queryParams.query = query
@@ -48,6 +50,12 @@ export async function GET(req: Request) {
             queryParams.tag = tag
         }
 
+        if (sortDirection == "true") {
+            queryParams.sortDirection = "asc"
+        } else if (sortDirection == "false") {
+            queryParams.sortDirection = "desc"
+        }
+
         const questions = await prisma.question.findMany({
             take: parseInt(process.env.PAGINATION!),
             skip:
@@ -63,7 +71,8 @@ export async function GET(req: Request) {
                 },
             },
             orderBy: {
-                [queryParams.orderBy || "createdAt"]: "desc",
+                [queryParams.orderBy || "createdAt"]:
+                    queryParams.sortDirection || "desc",
             },
             include: {
                 connectionToQuestions: {
