@@ -12,7 +12,12 @@ async function Navbar() {
             <nav className="container flex w-full items-center justify-between py-5 text-xl">
                 <Logo />
                 {userId ? (
-                    <UserButton />
+                    <div className="flex items-center gap-5">
+                        <Link href={"/my-profile"} className="">
+                            My Profile
+                        </Link>
+                        <UserButton />
+                    </div>
                 ) : (
                     <Link
                         href={"/sign-in"}

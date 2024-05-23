@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 import { redirect } from "next/navigation"
 import { currentUser } from "@clerk/nextjs/server"
 import {
@@ -109,21 +110,27 @@ async function MyProfilePage() {
                             className="grid max-h-[600px] gap-5 overflow-scroll"
                         >
                             {completedQuestions.map((connection) => (
-                                <div className="space-y-4 lg:space-y-6">
+                                <article
+                                    className="space-y-4 lg:space-y-6"
+                                    key={connection.connnectionId}
+                                >
                                     <div className="flex items-center justify-between rounded-lg bg-gray-100 p-4 dark:bg-gray-700 lg:p-6">
                                         <div>
-                                            <h4 className="text-lg font-bold lg:text-xl">
-                                                {connection.question.name}
-                                            </h4>
+                                            <Link
+                                                href={
+                                                    "/" + connection.question.id
+                                                }
+                                            >
+                                                <h4 className="text-lg font-bold lg:text-xl">
+                                                    {connection.question.name}
+                                                </h4>
+                                            </Link>
                                             <p className="text-base text-gray-500 dark:text-gray-400 lg:text-lg">
                                                 {connection.question.desc}
                                             </p>
                                         </div>
-                                        <Button className="shrink-0" size="sm">
-                                            View
-                                        </Button>
                                     </div>
-                                </div>
+                                </article>
                             ))}
                         </TabsContent>
                         <TabsContent
@@ -131,21 +138,27 @@ async function MyProfilePage() {
                             className="grid max-h-[600px] gap-5 overflow-scroll"
                         >
                             {favoriteQuestions.map((connection) => (
-                                <div className="space-y-4 lg:space-y-6">
+                                <article
+                                    className="space-y-4 lg:space-y-6"
+                                    key={connection.connnectionId}
+                                >
                                     <div className="flex items-center justify-between rounded-lg bg-gray-100 p-4 dark:bg-gray-700 lg:p-6">
                                         <div>
-                                            <h4 className="text-lg font-bold lg:text-xl">
-                                                {connection.question.name}
-                                            </h4>
+                                            <Link
+                                                href={
+                                                    "/" + connection.question.id
+                                                }
+                                            >
+                                                <h4 className="text-lg font-bold lg:text-xl">
+                                                    {connection.question.name}
+                                                </h4>
+                                            </Link>
                                             <p className="text-base text-gray-500 dark:text-gray-400 lg:text-lg">
                                                 {connection.question.desc}
                                             </p>
                                         </div>
-                                        <Button className="shrink-0" size="sm">
-                                            View
-                                        </Button>
                                     </div>
-                                </div>
+                                </article>
                             ))}
                         </TabsContent>
                     </Tabs>
