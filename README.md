@@ -5,7 +5,7 @@ Questioneer is a high-performance web application designed to help users prepare
 ![img 2](https://res.cloudinary.com/djgays8fb/image/upload/v1719579391/github/etkw1ouheaebbd698wap.webp)
 ![img 4](https://res.cloudinary.com/djgays8fb/image/upload/v1719579391/github/ajprowfc6pwh6gvcxegr.webp)
 ![img 3](https://res.cloudinary.com/djgays8fb/image/upload/v1719579391/github/ugwsvwtyiwhvrnna2suh.webp)
-![img 1](https://res.cloudinary.com/djgays8fb/image/upload/v1719579391/github/ds2h17rnj1hv55gf2sx0.webp)
+![img 1](https://res.cloudinary.com/djgays8fb/image/upload/v1719580050/github/bmdx8bshfcaffnjo0my5.png)
 
 ### 🚀 Features
 
