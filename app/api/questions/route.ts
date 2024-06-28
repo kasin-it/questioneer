@@ -77,12 +77,15 @@ export async function GET(req: Request) {
             include: {
                 connectionToQuestions: {
                     where: {
-                        userId: userId || undefined,
+                        userId: userId || "0",
                     },
                 },
                 questionTag: true,
             },
         })
+
+        console.log(questions[1])
+        console.log(userId)
 
         const count = await prisma.question.count({
             take: parseInt(process.env.PAGINATION!),
