@@ -104,15 +104,17 @@ export async function getFeedback(questionId: number, answer: string) {
 
         console.log(response)
 
+
         let feedbackValue = response.data[0]?.generated_text ?? ""
         const isApproved = !feedbackValue
             .replace(input, "")
-            .includes("[DISAPPROVED]")
+            .includes("DISAPPROVED")
         feedbackValue = feedbackValue
             .replace(input, "")
             .replace(/"([^"]*)"/g, "")
             .replace("[APPROVED]", "")
             .replace("[DISAPPROVED]", "")
+            .replace("DISAPPROVED", "")
             .trim()
 
         if (isApproved && question.connectionToQuestions.length === 0) {
